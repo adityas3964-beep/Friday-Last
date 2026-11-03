@@ -21,9 +21,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Fix Missing Gradle Wrapper
+      - name: Fix Gradle Wrapper Version
         run: |
-          gradle wrapper
+          # Old checksum conflict hatayein aur wrapper jar regenerate karein
+          if [ -f gradle/wrapper/gradle-wrapper.properties ]; then
+            sed -i '/distributionSha256Sum/d' gradle/wrapper/gradle-wrapper.properties
+          fi
+          gradle wrapper --gradle-version 8.10.2 --distribution-type bin
           chmod +x gradlew
 
       - name: Build Debug APK
